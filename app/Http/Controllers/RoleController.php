@@ -7,79 +7,62 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $roles=Role::get();
+        return view('role.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        return view('role.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $roles =new Role();
+        $roles ->intitule=$request->intitule;
+        $roles->save();
+        return redirect()->route('role_index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Role $role)
+    public function show($id)
     {
-        //
+        $roles=Role::find($id);
+        if($roles)
+        {
+            return view('role.show' , compact('roles'));
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
+    public function edit($id)
     {
-        //
+        $roles=Role::find(($id));
+        return view('role.edit',compact('roles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Role $role)
+
+    public function update(Request $request,  $id) //request :permet de recupere les donnees saisies par l'utilisateur dans le formulaire
     {
-        //
+        $roles=Role::find($id);
+        if($roles)
+        {
+            $roles->intitule=$request->intitule;
+            $roles->save();
+            return redirect()->route('role_index');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Role $role)
+    
+    public function destroy( $id)
     {
-        //
+        $roles=Role::find($id);
+        if($roles)
+        {
+            $roles->delete();
+            return redirect()->route('role_index');
+
+        }
     }
 }

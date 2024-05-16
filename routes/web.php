@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+route::get('/role',[RoleController::class,'index'])->name('role_index');
+route::get('/role',[RoleController::class,'store'])->name('role_index');
+route::get('/role',[RoleController::class,'edit'])->name('role_index');
+//route::get('/role',[RoleController::class,'delete'])->name('role_index');
+
