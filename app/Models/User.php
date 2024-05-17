@@ -18,10 +18,23 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
+        'id_role',
+        'image',
     ];
+
+
+    public function Blog(){
+        return $this->hasMany(Blog::class,'id_user');
+    }
+
+
+    public function Role(){
+        return $this->belongsTo(Role::class,'id_role');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
