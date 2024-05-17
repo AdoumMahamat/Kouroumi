@@ -2,67 +2,82 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $roles=Role::get();
-        return view('role.index', compact('roles'));
+        $roles = Role::all();
+        return view('role.index', [
+            'roles' => $roles
+        ]);
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('role.create');
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, Role $role)
     {
-        $roles =new Role();
-        $roles ->intitule=$request->intitule;
-        $roles->save();
-        return redirect()->route('role_index');
+        $request->validate([
+            'intitule' => 'required|unique:roles,intitule',
+        ]);
+
+        $role->intitule = $request->intitule;
+        $role->save();
+        return redirect()->route('role.index');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Role $role)
     {
-        $roles=Role::find($id);
-        if($roles)
-        {
-            return view('role.show' , compact('roles'));
-        }
+        //
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Role $role)
     {
-        $roles=Role::find(($id));
-        return view('role.edit',compact('roles'));
+        //
     }
 
-
-    public function update(Request $request,  $id) //request :permet de recupere les donnees saisies par l'utilisateur dans le formulaire
-    {
-        $roles=Role::find($id);
-        if($roles)
-        {
-            $roles->intitule=$request->intitule;
-            $roles->save();
-            return redirect()->route('role_index');
-        }
+    public function update(Role $role){
+        return view('role.update', compact('role'));
     }
 
-    
-    public function destroy( $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function change(RoleRequest $request, Role $role)
     {
-        $roles=Role::find($id);
-        if($roles)
-        {
-            $roles->delete();
-            return redirect()->route('role_index');
+        $role->intitule = $request->intitule;
+        $role->save();
+        return redirect()->route('role.index');
+    }
 
-        }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Role $role)
+    {
+        $role->delete();
+
+        return redirect()->route('role.index');
     }
 }
